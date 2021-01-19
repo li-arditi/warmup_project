@@ -8,7 +8,7 @@
 
 *Structure of code:* used object oriented programming to create DriveInSquare() class
 
-* \__init\__(self): creates node 'drive_in_square', creates publisher to 'cmd_vel' topic, and tells what to do on shutdown (execute self.shutdown() [below])
+* \_\_init\_\_(self): creates node 'drive_in_square', creates publisher to 'cmd_vel' topic, and tells what to do on shutdown (execute self.shutdown() [below])
 
 * run(self): what actually makes the robot move
 
@@ -32,4 +32,4 @@
 
 *Gif of robot executing commands:*
 
-![gif of robot driving in square once](bags/drive_in_square.gif)
+![gif of robot driving in square once](drive_in_square.gif)
