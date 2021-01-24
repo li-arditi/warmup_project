@@ -64,26 +64,31 @@ class FollowWall(object):
             # we are facing the wall and closer than or at goal_dist away
             # so turn to be parallel with wall
             self.twist.linear.x = 0
-            self.state = TURN_STATE
+            if ang_closest_wall not in range(87,93):
+                # not at 90 deg 
+                self.twist.angular.z = -0.1
+            else:
+                self.twist.angular.z = 0
+                self.state = FOLLOWER_STATE
 
         self.twist_pub.publish(self.twist)
             
         
        
-    def turn(self, ranges):
-        # rospy.loginfo("we are about to turn")
-        (dist_closest_wall, ang_closest_wall) = self.find_closest(ranges)
-        # self.twist.linear.x = 0
-        # self.twist_pub.publish(self.twist)
-        # rospy.loginfo(ang_closest_wall)
-        if ang_closest_wall not in range(87,93):
-            # not at 90 deg 
-        #     error = math.radians(90 - ang_closest_wall)
-            self.twist.angular.z = -0.1
-        else:
-            self.twist.angular.z = 0
-            self.state = FOLLOWER_STATE
-        self.twist_pub.publish(self.twist)
+    # def turn(self, ranges):
+    #     # rospy.loginfo("we are about to turn")
+    #     (dist_closest_wall, ang_closest_wall) = self.find_closest(ranges)
+    #     # self.twist.linear.x = 0
+    #     # self.twist_pub.publish(self.twist)
+    #     # rospy.loginfo(ang_closest_wall)
+    #     if ang_closest_wall not in range(87,93):
+    #         # not at 90 deg 
+    #     #     error = math.radians(90 - ang_closest_wall)
+    #         self.twist.angular.z = -0.1
+    #     else:
+    #         self.twist.angular.z = 0
+    #         self.state = FOLLOWER_STATE
+    #     self.twist_pub.publish(self.twist)
 
 
     
