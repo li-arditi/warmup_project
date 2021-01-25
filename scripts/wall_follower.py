@@ -38,7 +38,7 @@ class FollowWall(object):
     def find_wall(self, ranges):
 
         (dist_closest_wall, ang_closest_wall) = self.find_closest(ranges)
-        rospy.loginfo(dist_closest_wall)
+        # rospy.loginfo(dist_closest_wall)
         if dist_closest_wall == 'inf':
             # no walls around so just stay where you are
             rospy.loginfo("if dist is inf")
@@ -64,31 +64,26 @@ class FollowWall(object):
             # we are facing the wall and closer than or at goal_dist away
             # so turn to be parallel with wall
             self.twist.linear.x = 0
-            if ang_closest_wall not in range(87,93):
-                # not at 90 deg 
-                self.twist.angular.z = -0.1
-            else:
-                self.twist.angular.z = 0
-                self.state = FOLLOWER_STATE
+            self.state = TURN_STATE
 
         self.twist_pub.publish(self.twist)
             
         
        
-    # def turn(self, ranges):
-    #     # rospy.loginfo("we are about to turn")
-    #     (dist_closest_wall, ang_closest_wall) = self.find_closest(ranges)
-    #     # self.twist.linear.x = 0
-    #     # self.twist_pub.publish(self.twist)
-    #     # rospy.loginfo(ang_closest_wall)
-    #     if ang_closest_wall not in range(87,93):
-    #         # not at 90 deg 
-    #     #     error = math.radians(90 - ang_closest_wall)
-    #         self.twist.angular.z = -0.1
-    #     else:
-    #         self.twist.angular.z = 0
-    #         self.state = FOLLOWER_STATE
-    #     self.twist_pub.publish(self.twist)
+    def turn(self, ranges):
+        # rospy.loginfo("we are about to turn")
+        (dist_closest_wall, ang_closest_wall) = self.find_closest(ranges)
+        # self.twist.linear.x = 0
+        # self.twist_pub.publish(self.twist)
+        # rospy.loginfo(ang_closest_wall)
+        if ang_closest_wall not in range(87,93):
+            # not at 90 deg 
+        #     error = math.radians(90 - ang_closest_wall)
+            self.twist.angular.z = -0.1
+        else:
+            self.twist.angular.z = 0
+            self.state = FOLLOWER_STATE
+        self.twist_pub.publish(self.twist)
 
 
     
@@ -100,17 +95,17 @@ class FollowWall(object):
         # (dist_closest_wall, ang_closest_wall) = self.find_closest(ranges)
         # rospy.loginfo(dist_closest_wall)
 
-        if ranges[0] <= 1:
+        if ranges[0] <= 1.2:
             # if we detect a corner go to handle corner state
-            self.theta = math.ceil(math.degrees(math.atan(ranges[90]/ranges[0])))
-            self.twist.linear.x = 0.15
+            # self.theta = math.ceil(math.degrees(math.atan(ranges[90]/ranges[0])))
+            self.twist.linear.x = 0.1
             self.twist.angular.z = -0.1
             self.state = CORNER_STATE
         
         else:
             # no corner detected so continue straight
             error = goal_dist - ranges[90] # too close gives pos
-            self.twist.angular.z = -error/5
+            self.twist.angular.z = -error/3
         
         self.twist_pub.publish(self.twist)
 
@@ -132,7 +127,6 @@ class FollowWall(object):
         # self.twist_pub.publish(self.twist)
 
         
-        
         # theta = math.ceil(math.degrees(math.atan(ranges[90]/ranges[0])))
         # rospy.loginfo(theta)
         
@@ -140,12 +134,12 @@ class FollowWall(object):
         (dist_closest_new, ang_closest_new) = self.find_closest(ranges)
         rospy.loginfo(ang_closest_new)
 
-        if ang_closest_new in range(87,93):
+        if ang_closest_new in range(85,95):
             self.twist.angular.z = 0
             self.state = FOLLOWER_STATE
         
         else:
-            self.twist.angular.z = -0.23
+            self.twist.angular.z = -0.2
             
         
         self.twist_pub.publish(self.twist)
